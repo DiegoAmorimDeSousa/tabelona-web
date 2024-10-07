@@ -9,7 +9,7 @@ const TableContainer = styled.table`
 
 const THead = styled.thead`
   color: white;
-  background: gray;
+  background: #444242;
 
   .pos-thead {
     border-radius: 10px 0 0 0;
@@ -34,6 +34,12 @@ const THead = styled.thead`
 `;
 
 const TBody = styled.tbody`
+  img {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+  }
+
   .pos-tbody {
     display: flex;
     justify-content: center;
@@ -63,6 +69,9 @@ interface Team {
   wins: number;
   draws: number;
   defeat: number;
+  proGoals: number;
+  onwGoals: number;
+  logo: string;
 }
 
 const Table: React.FC = () => {
@@ -92,8 +101,6 @@ const Table: React.FC = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
-  console.log('teams', teams)
-
   return (
     <TableContainer className="min-w-full table-auto border-collapse border border-gray-400">
       <THead>
@@ -104,17 +111,48 @@ const Table: React.FC = () => {
           <th className="border border-gray-300 px-4 py-2 thead-m">V</th>
           <th className="border border-gray-300 px-4 py-2 thead-m">E</th>
           <th className="border border-gray-300 px-4 py-2 thead-m">D</th>
+          <th className="border border-gray-300 px-4 py-2 thead-m">GP</th>
+          <th className="border border-gray-300 px-4 py-2 thead-m">GC</th>
+          <th className="border border-gray-300 px-4 py-2 thead-m">J</th>
+          <th className="border border-gray-300 px-4 py-2 thead-m">%</th>
         </tr>
       </THead>
       <TBody>
         {loading ? <div>Loading...</div> : teams?.map((team, index) => (
           <tr key={team.id}>
-            <td className="border border-gray-300 px-4 py-2 pos-tbody">{index + 1}</td>
-            <td className="border border-gray-300 px-4 py-2">{team.name}</td>
-            <td className="border border-gray-300 px-4 py-2 p-tbody">{team.points}</td>
-            <td className="border border-gray-300 px-4 py-2 thead-m">{team.wins}</td>
-            <td className="border border-gray-300 px-4 py-2 thead-m">{team.draws}</td>
-            <td className="border border-gray-300 px-4 py-2 thead-m">{team.defeat}</td>
+            <td 
+              className="border border-gray-300 px-4 py-2 pos-tbody" 
+              style={{
+                background: index + 1 === 1 
+                  ? 'green' 
+                  : index + 1 < 7 
+                    ? 'blue' 
+                    : index + 1 < 13 
+                      ? 'yellow' 
+                      : index + 1 > 34 
+                        ? 'red' 
+                        : 'transparent' // ou qualquer outra cor padrão que você deseje
+              }}
+            >
+              {index + 1}
+            </td>
+            <td className="border border-gray-300 px-4 py-2">
+              <img src={team.logo} />
+              <div>{team.name}</div>
+            </td>
+            <td className="border border-gray-300 px-4 py-2">{team.points}</td>
+            <td className="border border-gray-300 px-4 py-2">{team.wins}</td>
+            <td className="border border-gray-300 px-4 py-2">{team.draws}</td>
+            <td className="border border-gray-300 px-4 py-2">{team.defeat}</td>
+            <td className="border border-gray-300 px-4 py-2">{team.proGoals}</td>
+            <td className="border border-gray-300 px-4 py-2">{team.onwGoals}</td>
+            <td className="border border-gray-300 px-4 py-2">{team.wins + team.draws + team.defeat}</td>
+            <td className="border border-gray-300 px-4 py-2">
+              {(() => {
+                const totalGames = team.wins + team.draws + team.defeat;
+                return totalGames > 0 ? `${((team.points / (totalGames * 3)) * 100).toFixed(2)}%` : '0%';
+              })()}
+            </td>
           </tr>
         ))}
       </TBody>
