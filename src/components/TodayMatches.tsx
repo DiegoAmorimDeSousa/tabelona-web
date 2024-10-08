@@ -16,7 +16,7 @@ const ListContainer = styled.div`
     width: 35px;
     height: 35px;
     object-fit: contain;
-    margin-right: 10px;
+    margin: 0 10px;
   }
 
   .title-tournament {
@@ -26,8 +26,17 @@ const ListContainer = styled.div`
 
   .match {
     text-align: center;
-    font-size: 20px;
+    font-size: 15px;
     margin: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  strong {
+    display: flex;
+    align-items: center;
+    margin: 0 8px;
   }
   
   .status {
@@ -53,6 +62,8 @@ interface Match {
   };
   status: string;
   tournament: string;
+  homeTeamLogo: string;
+  awayTeamLogo: string;
 }
 
 const TodayMatches: React.FC = () => {
@@ -111,7 +122,15 @@ const TodayMatches: React.FC = () => {
               {returnLogo(match?.tournament)}
               <p>Rodada: {match.roundInfo.round}</p>
             </div>
-            <div className='match'><strong>{match.homeTeam}</strong> {match.homeScore} - {match.awayScore} <strong>{match.awayTeam}</strong></div>
+            <div className='match'>
+              <strong>
+                <img src={match?.homeTeamLogo} />{match.homeTeam.replace('Recife', '')}{' '}
+              </strong> 
+                {match.homeScore} - {match.awayScore}{' '}
+              <strong>
+                {match.awayTeam.replace('Recife', '')} <img src={match?.awayTeamLogo} />
+              </strong>
+            </div>
             <p className='status'>{returnStatus(match?.status)}</p>
           </MatchItem>
         ))
