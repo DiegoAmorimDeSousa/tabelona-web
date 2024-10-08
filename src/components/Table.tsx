@@ -101,7 +101,7 @@ const Table: React.FC = () => {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/tournament/seria-a');
+        const response = await axios.get(`http://localhost:3000/tournament/seria-a`);
         console.log('response', response)
         if(response?.data){
           setTeams(response.data?.[0]?.serieABrasil)

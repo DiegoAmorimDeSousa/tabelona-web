@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import SerieBLogo from '../assets/serie_b_logo.png';
+import CopaSC from '../assets/copa_sc_logo.png';
 
 const ListContainer = styled.div`
   width: 100%;
@@ -83,11 +84,19 @@ const TodayMatches: React.FC = () => {
     if(tournament === 'Brasileiro Serie B 2024') {
       return <img src={SerieBLogo} alt={tournament} title={tournament}/>
     }
+
+    if(tournament === 'Copa Santa Catarina 2024') {
+      return <img src={CopaSC} alt={tournament} title={tournament}/>
+    }
   }
 
   const returnStatus = (status: string) => {
     if(status === 'finished') {
       return 'Finalizado'
+    }
+
+    if(status === 'inprogress') {
+      return 'Em andamento'
     }
   }
 
