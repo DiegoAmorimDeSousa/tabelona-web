@@ -3,9 +3,11 @@ import styled from 'styled-components';
 import axios from 'axios';
 import SerieBLogo from '../assets/serie_b_logo.png';
 import CopaSC from '../assets/copa_sc_logo.png';
+import CapixabaB from '../assets/capixaba_serie_b_logo.png';
 
 const ListContainer = styled.div`
   width: 100%;
+  margin-top: 74px;
   max-width: 400px;
   padding: 24px;
   border-radius: 8px;
@@ -65,6 +67,8 @@ interface Match {
   tournament: string;
   homeTeamLogo: string;
   awayTeamLogo: string;
+  homeTeamFull: string;
+  awayTeamFull: string;
 }
 
 const TodayMatches: React.FC = () => {
@@ -87,6 +91,10 @@ const TodayMatches: React.FC = () => {
 
     if(tournament === 'Copa Santa Catarina 2024') {
       return <img src={CopaSC} alt={tournament} title={tournament}/>
+    }
+
+    if(tournament === 'Capixaba, Série B 2024') {
+      return <img src={CapixabaB} alt={tournament} title={tournament}/>
     }
   }
 
@@ -132,11 +140,11 @@ const TodayMatches: React.FC = () => {
               <p>Rodada: {match.roundInfo.round}</p>
             </div>
             <div className='match'>
-              <strong>
+              <strong title={match.homeTeamFull.replace('Recife', '')}>
                 <img src={match?.homeTeamLogo} />{match.homeTeam.replace('Recife', '')}{' '}
               </strong> 
                 {match.homeScore} - {match.awayScore}{' '}
-              <strong>
+              <strong title={match.awayTeamFull.replace('Recife', '')}>
                 {match.awayTeam.replace('Recife', '')} <img src={match?.awayTeamLogo} />
               </strong>
             </div>
