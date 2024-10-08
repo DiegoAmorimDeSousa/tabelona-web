@@ -27,6 +27,10 @@ const ListContainer = styled.div`
     align-items: center;
   }
 
+  .first {
+    justify-content: space-between;
+  }
+
   .match {
     text-align: center;
     font-size: 15px;
@@ -69,6 +73,8 @@ interface Match {
   awayTeamLogo: string;
   homeTeamFull: string;
   awayTeamFull: string;
+  formattedStartDate: string;
+  currentMinute: number;
 }
 
 const TodayMatches: React.FC = () => {
@@ -98,13 +104,13 @@ const TodayMatches: React.FC = () => {
     }
   }
 
-  const returnStatus = (status: string) => {
+  const returnStatus = (status: string, currentMinute: number) => {
     if(status === 'finished') {
       return 'Finalizado'
     }
 
     if(status === 'inprogress') {
-      return 'Em andamento'
+      return 'Em andamento: ' + currentMinute + ':00'
     }
   }
 
@@ -135,9 +141,14 @@ const TodayMatches: React.FC = () => {
       ) : (
         matches.map((match, index) => (
           <MatchItem key={index}>
-            <div className='title-tournament'>
-              {returnLogo(match?.tournament)}
-              <p>Rodada: {match.roundInfo.round}</p>
+            <div className='title-tournament first'>
+              <div className='title-tournament'>
+                {returnLogo(match?.tournament)}
+                <p>Rodada: {match.roundInfo.round}</p>
+              </div>
+              <div>
+                {match?.formattedStartDate?.split(',')?.[1]?.split(':')[0] + ':' + match?.formattedStartDate?.split(',')?.[1]?.split(':')[1]}
+              </div>
             </div>
             <div className='match'>
               <strong title={match.homeTeamFull.replace('Recife', '')}>
@@ -148,7 +159,7 @@ const TodayMatches: React.FC = () => {
                 {match.awayTeam.replace('Recife', '')} <img src={match?.awayTeamLogo} />
               </strong>
             </div>
-            <p className='status'>{returnStatus(match?.status)}</p>
+            <p className='status'>{returnStatus(match?.status, match?.currentMinute)}</p>
           </MatchItem>
         ))
       )}

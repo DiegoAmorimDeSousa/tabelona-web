@@ -172,7 +172,7 @@ const Table: React.FC = () => {
                     ? '#2E8B57' 
                     : index + 1 < 7 
                       ? '#4169E1' 
-                      : index + 1 < 13 
+                      : index + 1 < 13 && selectedTournament === 'serieABrasil'
                         ? '#DAA520' 
                         : index + 1 > 34 
                           ? '#A52A2A' 
