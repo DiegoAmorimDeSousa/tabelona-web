@@ -113,7 +113,7 @@ const Table: React.FC = () => {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/tournament/${selectedTournament}`);
+        const response = await axios.get(`https://tabelona-api.onrender.com/tournament/${selectedTournament}`);
         if(response?.data){
           setTeams(response.data?.[0]?.[selectedTournament])
         }

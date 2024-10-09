@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import SerieBLogo from '../assets/serie_b_logo.png';
+import SerieALogo from '../assets/serie_a_logo.png';
 import CopaSC from '../assets/copa_sc_logo.png';
 import CapixabaB from '../assets/capixaba_serie_b_logo.png';
 
@@ -95,6 +96,10 @@ const TodayMatches: React.FC = () => {
       return <img src={SerieBLogo} alt={tournament} title={tournament}/>
     }
 
+    if(tournament === 'Brasileiro Serie A 2024') {
+      return <img src={SerieALogo} alt={tournament} title={tournament}/>
+    }
+
     if(tournament === 'Copa Santa Catarina 2024') {
       return <img src={CopaSC} alt={tournament} title={tournament}/>
     }
@@ -118,7 +123,7 @@ const TodayMatches: React.FC = () => {
     const fetchMatches = async () => {
       try {
         const currentDate = getCurrentDate();
-        const response = await axios.get(`http://localhost:3000/events/${currentDate}`);
+        const response = await axios.get(`https://tabelona-api.onrender.com/events/${currentDate}`);
         setMatches(response.data); 
       } catch (err: unknown) {
         console.log('err', err)
