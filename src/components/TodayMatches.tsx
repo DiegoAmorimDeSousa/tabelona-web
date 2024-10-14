@@ -15,42 +15,7 @@ const ListContainer = styled.div`
   background: #444242;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-left: 24px;
-
-  img {
-    width: 35px;
-    height: 35px;
-    object-fit: contain;
-    margin: 0 10px;
-  }
-
-  .title-tournament {
-    display: flex;
-    align-items: center;
-  }
-
-  .first {
-    justify-content: space-between;
-  }
-
-  .match {
-    text-align: center;
-    font-size: 15px;
-    margin: 15px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  strong {
-    display: flex;
-    align-items: center;
-    margin: 0 8px;
-  }
-  
-  .status {
-    font-size: 12px;
-    text-align: center;
-  }
+  color: #fff; 
 `;
 
 const MatchItem = styled.div`
@@ -58,6 +23,101 @@ const MatchItem = styled.div`
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
+  background: #555; 
+  transition: background 0.3s;
+
+  &:hover {
+    background: #666; 
+  }
+
+    .status-indicator {
+    display: inline-block;
+    width: 10px; 
+    height: 10px; 
+    border-radius: 50%; 
+    background-color: green; 
+    margin-right: 5px; 
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+`;
+
+const MatchesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+`;
+
+const DateSelector = styled.input`
+  margin-bottom: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #444; 
+  color: #fff; 
+  font-size: 16px;
+
+  &::webkit-calendar-picker-indicator {
+    filter: invert(1); 
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #ffd700;
+  }
+`;
+
+const TournamentTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  img {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    margin: 0 10px 0 0;
+  }
+
+  p {
+    margin: 0;
+  }
+`;
+
+const MatchDetails = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px 0;
+  text-align: center;
+
+  img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    margin: 0 10px;
+  }
+
+  .strong {
+    display: flex;
+  }
+`;
+
+const StatusText = styled.p`
+  text-align: center;
+  margin: 0;
+  font-size: 12px;
 `;
 
 interface Match {
@@ -82,92 +142,91 @@ const TodayMatches: React.FC = () => {
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  const getCurrentDate = (): string => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
   const returnLogo = (tournament: string) => {
-    if(tournament === 'Brasileiro Serie B 2024') {
-      return <img src={SerieBLogo} alt={tournament} title={tournament}/>
+    if (tournament === 'Brasileiro Serie B 2024') {
+      return <img src={SerieBLogo} alt={tournament} title={tournament} />;
     }
-
-    if(tournament === 'Brasileiro Serie A 2024') {
-      return <img src={SerieALogo} alt={tournament} title={tournament}/>
+    if (tournament === 'Brasileiro Serie A 2024') {
+      return <img src={SerieALogo} alt={tournament} title={tournament} />;
     }
-
-    if(tournament === 'Copa Santa Catarina 2024') {
-      return <img src={CopaSC} alt={tournament} title={tournament}/>
+    if (tournament === 'Copa Santa Catarina 2024') {
+      return <img src={CopaSC} alt={tournament} title={tournament} />;
     }
-
-    if(tournament === 'Capixaba, Série B 2024') {
-      return <img src={CapixabaB} alt={tournament} title={tournament}/>
+    if (tournament === 'Capixaba, Série B 2024') {
+      return <img src={CapixabaB} alt={tournament} title={tournament} />;
     }
-  }
+  };
 
   const returnStatus = (status: string, currentMinute: number) => {
-    if(status === 'finished') {
-      return 'Finalizado'
+    if (status === 'finished') {
+      return 'Finalizado';
     }
 
-    if(status === 'inprogress') {
-      return 'Em andamento: ' + currentMinute + ':00'
+    if (status === 'inprogress') {
+      return (
+        <span>
+          <span className="status-indicator"></span>
+          Em andamento: {currentMinute}:00
+        </span>
+      );
     }
-  }
+  };
+
+  const fetchMatches = async () => {
+    try {
+      if(selectedDate && selectedDate?.split('-')?.length === 3 && selectedDate?.split('-')?.[1]?.length === 2 &&
+      selectedDate?.split('-')?.[2]?.length === 2 && selectedDate?.split('-')?.[0]?.length === 4) {
+        const response = await axios.get(`https://tabelona-api.onrender.com/events/${selectedDate}`);
+        setMatches(response.data);
+      }
+    } catch (err: unknown) {
+      console.log('err', err);
+      setError('Erro ao buscar os jogos do dia selecionado');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchMatches = async () => {
-      try {
-        const currentDate = getCurrentDate();
-        const response = await axios.get(`https://tabelona-api.onrender.com/events/${currentDate}`);
-        setMatches(response.data); 
-      } catch (err: unknown) {
-        console.log('err', err)
-        setError('Erro ao buscar os jogos de hoje');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchMatches();
-  }, []);
+  }, [selectedDate]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
     <ListContainer>
-      {matches.length === 0 ? (
-        <div>Nenhum jogo hoje</div>
-      ) : (
-        matches.map((match, index) => (
-          <MatchItem key={index}>
-            <div className='title-tournament first'>
-              <div className='title-tournament'>
+      <DateSelector
+        type="date"
+        value={selectedDate}
+        onChange={(e) => setSelectedDate(e.target.value)}
+      />
+      <MatchesContainer>
+        {matches.length === 0 ? (
+          <div>Nenhum jogo hoje</div>
+        ) : (
+          matches.map((match, index) => (
+            <MatchItem key={index}>
+              <TournamentTitle>
                 {returnLogo(match?.tournament)}
                 <p>Rodada: {match.roundInfo.round}</p>
-              </div>
-              <div>
-                {match?.formattedStartDate?.split(',')?.[1]?.split(':')[0] + ':' + match?.formattedStartDate?.split(',')?.[1]?.split(':')[1]}
-              </div>
-            </div>
-            <div className='match'>
-              <strong title={match.homeTeamFull.replace('Recife', '')}>
-                <img src={match?.homeTeamLogo} />{match.homeTeam.replace('Recife', '')}{' '}
-              </strong> 
-                {match.homeScore} - {match.awayScore}{' '}
-              <strong title={match.awayTeamFull.replace('Recife', '')}>
-                {match.awayTeam.replace('Recife', '')} <img src={match?.awayTeamLogo} />
-              </strong>
-            </div>
-            <p className='status'>{returnStatus(match?.status, match?.currentMinute)}</p>
-          </MatchItem>
-        ))
-      )}
+              </TournamentTitle>
+              <MatchDetails>
+                <strong title={match.homeTeamFull.replace('Recife', '')}>
+                  <img src={match?.homeTeamLogo} /><div>{match.homeTeam.replace('Recife', '')}{' '}</div>
+                </strong>
+                <div>{match.homeScore} - {match.awayScore}{' '}</div>
+                <strong title={match.awayTeamFull.replace('Recife', '')}>
+                  <img src={match?.awayTeamLogo} /> <div>{match.awayTeam.replace('Recife', '')}</div>
+                </strong>
+              </MatchDetails>
+              <StatusText>{returnStatus(match?.status, match?.currentMinute)}</StatusText>
+            </MatchItem>
+          ))
+        )}
+      </MatchesContainer>
     </ListContainer>
   );
 };
