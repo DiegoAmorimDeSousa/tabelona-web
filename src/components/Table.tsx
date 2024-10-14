@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { HiMinus, HiOutlineArrowLongDown, HiOutlineArrowLongUp  } from "react-icons/hi2";
 
 const TableContainer = styled.table`
   width: 100%;
@@ -66,6 +67,18 @@ const TBody = styled.tbody`
     align-items: center;
   }
 
+  .team-name {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .show-position {
+    display: flex;
+    align-items: center;
+  }
+
   .pos-tbody {
     display: flex;
     justify-content: center;
@@ -102,6 +115,8 @@ interface Team {
   proGoals: number;
   onwGoals: number;
   logo: string;
+  currentPosition: number;
+  position: number;
 }
 
 const Table: React.FC = () => {
@@ -127,6 +142,31 @@ const Table: React.FC = () => {
 
     fetchTeams();
   }, [selectedTournament]);
+
+  const showChangesPosition = (currentPosition: number, lastPosition: number) => {
+    if(currentPosition === lastPosition){
+      return (
+        <>
+          <HiMinus />
+        </>
+      )
+    }
+    if(currentPosition > lastPosition){
+      return (
+        <div className='show-position'>
+          <HiOutlineArrowLongDown color='red' />{currentPosition - lastPosition}
+        </div>
+      )
+    }
+    if(currentPosition < lastPosition){
+      return (
+        <div className='show-position'>
+          <HiOutlineArrowLongUp color='green' />{lastPosition - currentPosition}
+        </div>
+      )
+    }
+    return;
+  }
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -184,7 +224,7 @@ const Table: React.FC = () => {
               <td className="border border-gray-300 px-4 py-2">
                 <div className='logo-name'>
                   <img src={team.logo} alt={team.name} />
-                  <div>{team.name}</div>
+                  <div className='team-name'>{team.name}{' '} {showChangesPosition(team?.currentPosition, team?.position)}</div>
                 </div>
               </td>
               <td className="border border-gray-300 px-4 py-2 p-tbody">{team.points}</td>
