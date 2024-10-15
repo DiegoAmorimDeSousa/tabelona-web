@@ -176,13 +176,18 @@ const TodayMatches: React.FC = () => {
 
   const fetchMatches = async () => {
     try {
-      if(selectedDate && selectedDate?.split('-')?.length === 3 && selectedDate?.split('-')?.[1]?.length === 2 &&
-      selectedDate?.split('-')?.[2]?.length === 2 && selectedDate?.split('-')?.[0]?.length === 4) {
-        const response = await axios.get(`https://tabelona-api.onrender.com/events/${selectedDate}`);
+      if (
+        selectedDate &&
+        selectedDate.split('-').length === 3 &&
+        selectedDate.split('-')[1].length === 2 &&
+        selectedDate.split('-')[2].length === 2 &&
+        selectedDate.split('-')[0].length === 4
+      ) {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/events/${selectedDate}`);
         setMatches(response.data);
       }
     } catch (err: unknown) {
-      console.log('err', err);
+      console.log('Erro:', err);
       setError('Erro ao buscar os jogos do dia selecionado');
     } finally {
       setLoading(false);

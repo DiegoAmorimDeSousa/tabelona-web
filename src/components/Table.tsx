@@ -128,7 +128,7 @@ const Table: React.FC = () => {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await axios.get(`https://tabelona-api.onrender.com/tournament/${selectedTournament}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/tournament/${selectedTournament}`);
         if(response?.data){
           setTeams(response.data?.[0]?.[selectedTournament])
         }
