@@ -5,6 +5,8 @@ import SerieBLogo from '../assets/serie_b_logo.png';
 import SerieALogo from '../assets/serie_a_logo.png';
 import CopaSC from '../assets/copa_sc_logo.png';
 import CapixabaB from '../assets/capixaba_serie_b_logo.png';
+import CopaDoBrasil from '../assets/CopaDoBrasil.png';
+import SerieCLogo from '../assets/Campeonato_Brasileiro_Série_C_logo.png';
 
 const ListContainer = styled.div`
   width: 100%;
@@ -148,8 +150,14 @@ const TodayMatches: React.FC = () => {
     if (tournament === 'Brasileiro Serie B 2024') {
       return <img src={SerieBLogo} alt={tournament} title={tournament} />;
     }
+    if (tournament === 'Copa do Brasil 2024') {
+      return <img src={CopaDoBrasil} alt={tournament} title={tournament} />;
+    }
     if (tournament === 'Brasileiro Serie A 2024') {
       return <img src={SerieALogo} alt={tournament} title={tournament} />;
+    }
+    if (tournament === 'Brasileiro Serie C 2024') {
+      return <img src={SerieCLogo} alt={tournament} title={tournament} />;
     }
     if (tournament === 'Copa Santa Catarina 2024') {
       return <img src={CopaSC} alt={tournament} title={tournament} />;
