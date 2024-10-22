@@ -7,6 +7,7 @@ import CopaSC from '../assets/copa_sc_logo.png';
 import CapixabaB from '../assets/capixaba_serie_b_logo.png';
 import CopaDoBrasil from '../assets/CopaDoBrasil.png';
 import SerieCLogo from '../assets/Campeonato_Brasileiro_Série_C_logo.png';
+import Libertadores from '../assets/Conmebol_Libertadores_logo.svg.png';
 
 const ListContainer = styled.div`
   width: 100%;
@@ -129,6 +130,7 @@ interface Match {
   awayScore: number;
   roundInfo: {
     round: number;
+    name: string;
   };
   status: string;
   tournament: string;
@@ -147,8 +149,12 @@ const TodayMatches: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
   const returnLogo = (tournament: string) => {
+    console.log('tournament', tournament)
     if (tournament === 'Brasileiro Serie B 2024') {
       return <img src={SerieBLogo} alt={tournament} title={tournament} />;
+    }
+    if (tournament === 'Copa Libertadores 2024') {
+      return <img src={Libertadores} alt={tournament} title={tournament} />;
     }
     if (tournament === 'Copa do Brasil 2024') {
       return <img src={CopaDoBrasil} alt={tournament} title={tournament} />;
@@ -224,7 +230,7 @@ const TodayMatches: React.FC = () => {
             <MatchItem key={index}>
               <TournamentTitle>
                 {returnLogo(match?.tournament)}
-                <p>Rodada: {match.roundInfo.round}</p>
+                <p>Rodada: {match.roundInfo.name || match.roundInfo.round}</p>
               </TournamentTitle>
               <MatchDetails>
                 <strong title={match.homeTeamFull.replace('Recife', '')}>
