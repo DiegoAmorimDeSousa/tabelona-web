@@ -144,6 +144,8 @@ const Table: React.FC = () => {
   }, [selectedTournament]);
 
   const showChangesPosition = (currentPosition: number, lastPosition: number) => {
+    console.log('currentPosition', currentPosition)
+    console.log('lastPosition', lastPosition)
     if(currentPosition === lastPosition){
       return (
         <>
@@ -186,6 +188,12 @@ const Table: React.FC = () => {
         >
           Série B - Brasil
         </div>
+        <div 
+          style={selectedTournament === 'serieAMundo' ? {borderBottom: '4px solid green'} : {}}
+          onClick={() => setSelectedTournament('serieAMundo')}
+        >
+          Série A - Mundo
+        </div>
       </SelectTournament>
       <TableContainer>
         <THead>
@@ -224,7 +232,7 @@ const Table: React.FC = () => {
               <td className="border border-gray-300 px-4 py-2">
                 <div className='logo-name'>
                   <img src={team.logo} alt={team.name} />
-                  <div className='team-name'>{team.name}{' '} {showChangesPosition(team?.currentPosition, team?.position)}</div>
+                  <div className='team-name'>{team.name}{' '} {showChangesPosition(team?.currentPosition, index + 1)}</div>
                 </div>
               </td>
               <td className="border border-gray-300 px-4 py-2 p-tbody">{team.points}</td>

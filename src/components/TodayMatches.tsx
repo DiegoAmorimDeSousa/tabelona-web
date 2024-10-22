@@ -8,6 +8,10 @@ import CapixabaB from '../assets/capixaba_serie_b_logo.png';
 import CopaDoBrasil from '../assets/CopaDoBrasil.png';
 import SerieCLogo from '../assets/Campeonato_Brasileiro_Série_C_logo.png';
 import Libertadores from '../assets/Conmebol_Libertadores_logo.svg.png';
+import SulAmericana from '../assets/Conmebol_Sudamericana_logo.png';
+import Champions from '../assets/unnamed.png';
+import LaLiga2 from '../assets/la-liga-2.png';
+import LaLiga from '../assets/LaLiga_logo_2023.svg.png';
 
 const ListContainer = styled.div`
   width: 100%;
@@ -153,6 +157,15 @@ const TodayMatches: React.FC = () => {
     if (tournament === 'Brasileiro Serie B 2024') {
       return <img src={SerieBLogo} alt={tournament} title={tournament} />;
     }
+    if (tournament === 'UEFA Champions League 24/25') {
+      return <img src={Champions} alt={tournament} title={tournament} />;
+    }
+    if (tournament === 'LaLiga 2 24/25') {
+      return <img src={LaLiga2} alt={tournament} title={tournament} />;
+    }
+    if (tournament === 'LaLiga 24/25') {
+      return <img src={LaLiga} alt={tournament} title={tournament} />;
+    }
     if (tournament === 'Copa Libertadores 2024') {
       return <img src={Libertadores} alt={tournament} title={tournament} />;
     }
@@ -170,6 +183,9 @@ const TodayMatches: React.FC = () => {
     }
     if (tournament === 'Capixaba, Série B 2024') {
       return <img src={CapixabaB} alt={tournament} title={tournament} />;
+    }
+    if (tournament === 'Copa Sudamericana 2024') {
+      return <img src={SulAmericana} alt={tournament} title={tournament} />;
     }
   };
 
