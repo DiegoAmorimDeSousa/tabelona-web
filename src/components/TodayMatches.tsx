@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
+// import axios from 'axios';
 import SerieBLogo from '../assets/serie_b_logo.png';
 import SerieALogo from '../assets/serie_a_logo.png';
 import CopaSC from '../assets/copa_sc_logo.png';
@@ -213,8 +213,8 @@ const TodayMatches: React.FC = () => {
         selectedDate.split('-')[2].length === 2 &&
         selectedDate.split('-')[0].length === 4
       ) {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/events/${selectedDate}`);
-        setMatches(response.data);
+        // const response = await axios.get(`${import.meta.env.VITE_API_URL}/events/${selectedDate}`);
+        setMatches([]);
       }
     } catch (err: unknown) {
       console.log('Erro:', err);
